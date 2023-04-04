@@ -7,7 +7,6 @@ import re
 
 
 pattern = re.compile(r'\b\d+\.\d{5}\b')
-api_key = ''
 bot: aiogram.Bot
 
 async def treasure_handle(message: Message) -> None:
@@ -20,7 +19,13 @@ async def treasure_handle(message: Message) -> None:
     await message.answer(text=f'Coordinates for {format_latitude}, {format_longitude}')
     await message.answer_location(latitude=result[0], longitude=result[1])
     
-    
+    await message.delete()
+
+
+async def treasure_rejecte(message: Message) -> None:
+    await message.answer("Send picture, bro!")
+
+
 def find_coordinates(file) -> set:
     img = Image.open(file)
     img = img.convert('L')
