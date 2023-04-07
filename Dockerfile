@@ -5,7 +5,7 @@ FROM python:3.8-slim
 RUN mkdir -p /user/src/024bot
 WORKDIR /usr/src/024bot
 COPY . .
-RUN apt-get update && apt-get install tesseract-ocr
+RUN apt-get update && apt-get install -y tesseract-ocr
 RUN pip install pipenv
 RUN pipenv install --system --deploy
 
