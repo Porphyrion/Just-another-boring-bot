@@ -4,7 +4,7 @@ from PIL import Image
 import aiogram
 from aiogram.types import Message
 import re
-
+import asyncio
 
 pattern = re.compile(r'\b\d+\.\d{5}\b')
 bot: aiogram.Bot
@@ -16,10 +16,14 @@ async def treasure_handle(message: Message) -> None:
     
     format_latitude = result[0].replace(".",r"\.")
     format_longitude = result[1].replace(".",r"\.")
-    await message.answer(text=f'Coordinates for {format_latitude}, {format_longitude}')
-    await message.answer_location(latitude=result[0], longitude=result[1])
+    text_replay = await message.answer(text=f'Coordinates for {format_latitude}, {format_longitude}')
+    map_replay = await message.answer_location(latitude=result[0], longitude=result[1])
     
+    await asyncio.sleep(60)
+
     await message.delete()
+    await map_replay.delete()
+    await text_replay.delete()
 
 
 async def treasure_rejecte(message: Message) -> None:
