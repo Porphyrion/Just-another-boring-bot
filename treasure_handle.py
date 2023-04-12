@@ -24,8 +24,8 @@ async def treasure_handle(message: types.Message) -> None:
     
 
 async def treasure_rejecte(message: types.Message) -> None:
-    logging.info(f'treasure_rejecte() for uset {message.from_user.id}')
-    await message.answer("Send picture, bro!")
+    logging.info(f'treasure_rejecte() for user {message.from_user.id}')
+    await message.answer("Send picture, bro\!")
 
 
 def find_coordinates(file) -> set:
@@ -38,7 +38,7 @@ def find_coordinates(file) -> set:
     return coord
 
 
-def parse_image(img, invert=False) ->set:
+def parse_image(img, invert=False) -> set:
     if invert:
         img = img.convert('L')
     
@@ -51,32 +51,32 @@ def format_coordinates(coord) ->str:
 
 
 async def sorry_answer(message: types.Message, file):
-    
     # logging.info(f'File saved in {file.name}')
     
-    await message.answer(text='Sorry, can`t find coordinates')
-    await eat_breadcrumbs(message)
+    answer =  await message.answer(text='Sorry, can\'t find coordinates')
+
+    await eat_breadcrumbs(message, replay_message=answer, timeout=15)
 
 
 async def succese_answer(message: types.Message, coord, file):
     del file
-      
+    
     text_format = format_coordinates(coord)
     text_replay = await message.answer(text=f'Coordinates for {text_format}')
     map_replay = await message.answer_location(latitude=coord[0], longitude=coord[1])
     
-    await eat_breadcrumbs(text_format, text_replay, map_replay)
+    await eat_breadcrumbs(message, text_replay, map_replay)
 
 
-async def eat_breadcrumbs(message, replay_message=None, replay_map=None):
-    await asyncio.sleep(60)
+async def eat_breadcrumbs(message, replay_message=None, replay_map=None, timeout=60):
+    await asyncio.sleep(timeout)
 
     try:
         await message.delete()
-        await replay_map.delete()
         await replay_message.delete()
-    except TypeError:
-        print("Caught TypeError: Cannot call my_method on None object")
+        await replay_map.delete() 
+    except AttributeError:
+        logging.info('eat_breadcrumbs(): Caught AttributeError')
         
     
     

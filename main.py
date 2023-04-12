@@ -9,7 +9,7 @@ env: DotEnvHelper  = DotEnvHelper()
 storage: MemoryStorage = MemoryStorage()
 
 
-bot: Bot = Bot(env.get_value(env.BOT_TOKEN_FIELD))
+bot: Bot = Bot(env.get_value(env.BOT_TOKEN_FIELD), parse_mode='MarkdownV2')
 dp: Dispatcher = Dispatcher(bot, storage=storage)
 treasure_handle.bot = bot
 
